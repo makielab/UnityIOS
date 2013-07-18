@@ -2,16 +2,12 @@ require 'formula'
 
 class Libimobiledevice < Formula
   homepage 'http://www.libimobiledevice.org/'
-  url 'https://github.com/libimobiledevice/libimobiledevice/archive/7eae52efbb2c43af2bd2a16fbc858610bfdbaeff.tar.gz'
-  sha1 '63116ccc91b7a3d555d2b3efdf89f7e2cd942ed4'
-  version '1.1.16'
+  url 'http://www.libimobiledevice.org/downloads/libimobiledevice-1.1.4.tar.bz2'
+  sha1 'd59d9751d9f792e8674cd87c91005d431bf56065'
 
   head 'http://cgit.sukimashita.com/libimobiledevice.git'
 
-  depends_on 'autoconf'
-  depends_on 'automake'
-  depends_on 'libtool'
-  depends_on 'pkg-config'
+  depends_on 'pkg-config' => :build
   depends_on 'libtasn1'
   depends_on 'libplist'
   depends_on 'usbmuxd'
@@ -20,7 +16,6 @@ class Libimobiledevice < Formula
 
   def install
     ENV.append_to_cflags "-std=gnu89" if ENV.compiler == :clang
-    system "./autogen.sh"
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}",
                           # As long as libplist builds without Cython
