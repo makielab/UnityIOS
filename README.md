@@ -2,7 +2,7 @@ Unity IOS
 ========
 Build unity project for iOS, install, run on device
 
-All from the command line.
+All from the command line. [Working example here][example]
 
 Homebrew
 -------
@@ -21,7 +21,7 @@ You need an editor script in your project that wraps `BuildPipeline.BuildPlayer`
 
 This will generate the xcode project:
 ~~~
-/Application/Unity.app/Contents/MacOS/Unity -projectPath <path> -batchmode -quit -logFile - -executeMethod <build wrapper>
+/Applications/Unity/Unity.app/Contents/MacOS/Unity -projectPath $UNITY_PROJECT -batchmode -quit -logFile - -executeMethod $BUILD_WRAPPER
 ~~~
 
 
@@ -29,9 +29,9 @@ XCode
 -------
 This builds the .app and the .ipa:
 ~~~
-cd <unity output>
-/usr/bin/xcodebuild -alltargets -configuration Release clean build CONFIGURATION_BUILD_DIR=<xcode output> 
-/usr/bin/xcrun --sdk iphoneos PackageApplication <xcode output>/<app name>.app
+pushd $UNITY_OUTPUT
+/usr/bin/xcodebuild -alltargets -configuration Release build CONFIGURATION_BUILD_DIR=$XCODE_OUTPUT 
+/usr/bin/xcrun --sdk iphoneos PackageApplication "$XCODE_OUTPUT/$APP_NAME.app"
 ~~~
 
 
@@ -39,9 +39,9 @@ iDevice
 -------
 This installs and runs the ipa:
 ~~~
-ideviceinstaller -i  <xcode output>/<app name>.ipa -U <UDID>
-app_path = ideviceinstaller -l -U <UDID> -o xml | grep -o '>/private/var/.*/<app name>.app<' | sed 's/[<>]//g'
-idevice-app-runner -d -U <UDID> -r <app_path>
+ideviceinstaller -i  "$XCODE_OUTPUT/$APP_NAME.ipa" -U $IDEVICE_UDID
+APP_PATH=$(ideviceinstaller -l -U $IDEVICE_UDID -o xml | grep -o ">/private/var/.*/$APP_NAME.app<" | sed 's/[<>]//g')
+idevice-app-runner -d -U $IDEVICE_UDID -r $APP_PATH
 ~~~
 
 License
@@ -50,3 +50,4 @@ Code is under the [MIT license][license].
 
 [unity]:https://github.com/makielab/UnityIOS/blob/master/Unity/Builder.cs
 [license]:https://github.com/makielab/UnityIOS/blob/master/LICENSE
+[example]:https://github.com/makielab/UnityIOS/blob/master/example.sh
