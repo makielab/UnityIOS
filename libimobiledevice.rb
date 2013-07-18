@@ -8,7 +8,10 @@ class Libimobiledevice < Formula
 
   head 'http://cgit.sukimashita.com/libimobiledevice.git'
 
-  depends_on 'pkg-config' => :build
+  depends_on 'autoconf'
+  depends_on 'automake'
+  depends_on 'libtool'
+  depends_on 'pkg-config'
   depends_on 'libtasn1'
   depends_on 'libplist'
   depends_on 'usbmuxd'
@@ -17,7 +20,7 @@ class Libimobiledevice < Formula
 
   def install
     ENV.append_to_cflags "-std=gnu89" if ENV.compiler == :clang
-
+    system "./autogen.sh"
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}",
                           # As long as libplist builds without Cython
